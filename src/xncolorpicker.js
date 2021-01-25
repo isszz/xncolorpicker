@@ -240,7 +240,7 @@ dynamicLoadCss(csslist);
                         <input type="text" onfocus="this.select()">
                     </div>
                 </div>
-                
+
                 <div class="color-btn-group">
                     <a class="cancel-color">${this.btns[this.option.lang][0]}</a>
                     <a class="confirm-color">${this.btns[this.option.lang][1]}</a>
@@ -503,8 +503,12 @@ dynamicLoadCss(csslist);
                 else{
                     startpos.isMove=false;
                 }
-            })
-            document.addEventListener("mousemove", (e) => {
+
+	            document.addEventListener('mousemove', mousemove, !1);
+	            document.addEventListener('mouseup', mouseup, !1);
+            }, !1);
+
+	        var mousemove = function(e) {
                 if (t) {
                     that.changeColor(t, e, startpos);
                 } else if (startpos.isGradientBar) {//如果移动渐变滑块
@@ -551,8 +555,8 @@ dynamicLoadCss(csslist);
                 if(startpos.isMove){
                     this.moveDom(startpos,e);
                 }
-            })
-            document.addEventListener("mouseup", (e) => {
+	        };
+	        var mouseup = function(e) {
                 if (startpos.isGradientBar) {
                     var per = ((e.clientX - $(this.dom).find(".gradient-colors")[0].getBoundingClientRect().left) * 100 / $(this.dom).find(".gradient-colors")[0].getBoundingClientRect().width).toFixed(1);
                     if (this.gradientColor.arry.colors.length > 2) {
@@ -591,7 +595,10 @@ dynamicLoadCss(csslist);
                     this.pos.top=newtop;
                 }
                 startpos.isMove=false;
-            })
+
+            	document.removeEventListener('mousemove', mousemove, !1);
+            	document.removeEventListener('mouseup', mouseup, !1);
+	        };
             this.dom.addEventListener("click", (e) => {
                 e.stopPropagation();
                 var $t = $(e.target);
